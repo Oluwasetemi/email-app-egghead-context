@@ -1,7 +1,9 @@
 import React from 'react'
-import { fetchEmails } from './api'
+import { fetchEmails, fetchLatestEmails } from './api'
+import { withNotifier } from './NotificationContext'
 
-const {Provider, Consumer} = React.createContext()
+let EmailContext;
+const {Provider, Consumer} = EmailContext = React.createContext()
 
 class EmailProvider extends React.Component {
     state = {
@@ -16,7 +18,24 @@ class EmailProvider extends React.Component {
       fetchEmails()
         .then(emails => this.setState({ loading: false, emails }))
         .catch(error => this.setState({ loading: false, error }))
+        this.refreshInterval = setInterval(this.refresh, 5000);
     }
+
+    refresh = () => {
+        if (!this.state.loading) {
+            fetchLatestEmails().then(emails => {
+            if (emails.length > 0) {
+                this.setState(state => ({
+                emails: state.emails.concat(emails)
+                }));
+                // notify!
+                this.props.notify(
+                `${emails.length} more emails arrived`
+                );
+            }
+            });
+        }
+    };
 
     handleSelectEmail = (email) => {
         this.setState({ currentEmail: email })
@@ -32,4 +51,6 @@ class EmailProvider extends React.Component {
     }
 }
 
-export { EmailProvider, Consumer as EmailConsumer }
+const Wrapped = withNotifier(EmailProvider);
+
+export { Wrapped as EmailProvider, Consumer as EmailConsumer, EmailContext }
