@@ -33,14 +33,14 @@ describe('test whether the user context is working properly', () => {
                 {({ user, onLogin }) => (
                     <div>
                         <span>{user.username}</span>
-                        <button onClick={() => onLogin({ username: 'erin' })} />
+                        <button onClick={() => onLogin({ username: 'dave' })} />
                     </div>
                 )}
             </UserConsumer>
         </UserProvider>
     )
     fireEvent.click(container.querySelector('button'))
-    expect(container.querySelector('span').textContent).toEqual('erin')
+    expect(container.querySelector('span').textContent).toEqual('dave')
   })
 
   test('should log a user out', () => {
