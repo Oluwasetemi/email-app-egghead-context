@@ -6,9 +6,11 @@
     "pnp": true
   },
   "dependencies": {
+    "@types/jest": "^24.0.11",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "react-testing-library": "^6.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
