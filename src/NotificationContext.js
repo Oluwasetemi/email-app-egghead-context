@@ -3,9 +3,20 @@ import React from 'react'
 const {Provider, Consumer} = React.createContext()
 
 class NotificationProvider extends React.Component {
-    state = {
-        messages: []
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: [],
+            notify: this.addMessage
+        }
     }
+    componentDidMount = () => {
+      this.timer = setInterval(this.cleanup, 1000)
+    }
+    componentWillUnmount = () => {
+      clearInterval(this.timer)
+    }
+
     addMessage = text => {
         this.setState(state => ({
             messages: [
@@ -18,6 +29,12 @@ class NotificationProvider extends React.Component {
             ]
         }))
     }
+    cleanup = () => {
+        let now = new Date().getTime();
+        this.setState(state => ({
+            messages: state.messages.filter(m => now - m.addedAt < 3000)
+        }))
+    }
     removeMessage = message => {
         this.setState(state => ({
           messages: state.messages.filter(m => (
@@ -27,10 +44,7 @@ class NotificationProvider extends React.Component {
       }
     render() {
         return (
-            <Provider value={{
-                ...this.state,
-                notify: this.addMessage
-            }}>
+            <Provider value={ this.state }>
                 <div className="notification-wrapper">
                     <ul>{this.state.messages.map(message => (
                         <Notification
