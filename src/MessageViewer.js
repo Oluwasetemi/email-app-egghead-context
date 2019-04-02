@@ -9,7 +9,7 @@ const MessageViewer = () => (
         > Back
         </button>
         <h2>{currentEmail.subject}</h2>
-        <h2>{currentEmail.body}</h2>
+        <p>{currentEmail.body}</p>
       </div>
     )}
   </EmailConsumer>
